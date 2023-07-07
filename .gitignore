@@ -29,3 +29,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+### TC Compose files ###
+/compose/windows/teamcity_*
+/compose/linux/teamcity_*
