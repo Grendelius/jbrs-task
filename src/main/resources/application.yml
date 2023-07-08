@@ -1,0 +1,22 @@
+spring:
+  main:
+    banner-mode: off
+
+tc:
+  server:
+    url: 10.5.0.5:8111
+    token: ""
+
+  users:
+    - username: admin
+      password: admin
+
+    - username: ""
+      password: "${tc.server.token}"
+
+  vcs:
+    - type: GIT
+      rootUrl: https://github.com/Grendelius/
+      project: sandbox.git
+      username: atolkachev
+      password:

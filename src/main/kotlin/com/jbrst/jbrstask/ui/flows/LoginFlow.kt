@@ -8,7 +8,9 @@ import com.codeborne.selenide.Selenide.element
 import com.jbrst.jbrstask.core.models.User
 import com.jbrst.jbrstask.ui.core.Page
 import mu.KLogging
+import org.springframework.stereotype.Component
 
+@Component
 class LoginFlow {
 
     companion object : KLogging()
@@ -31,7 +33,6 @@ class LoginPage : Page() {
         private val usernameInput = element(byId("username"))
         private val passwordInput = element(byId("password"))
         private val loginBtn = element(byXpath("//input[@name='submitLogin']"))
-        private val rememberMeCheckBox = element(byId("remember"))
         private val errMsgBlock = element(byId("errorMessage"))
     }
 

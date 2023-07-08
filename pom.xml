@@ -15,20 +15,54 @@
         <maven.compiler.source>19</maven.compiler.source>
         <aspectj.version>1.9.19</aspectj.version>
         <allure.version>2.22.0</allure.version>
-        <kotlin.version>1.8.21</kotlin.version>
+        <kotlin.version>1.9.0</kotlin.version>
+        <retrofit.version>2.9.0</retrofit.version>
+        <spring.boot.version>3.1.1</spring.boot.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- Allure -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
             <version>${allure.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.codeborne</groupId>
-            <artifactId>selenide-testng</artifactId>
-            <version>6.13.1</version>
         </dependency>
         <dependency>
             <groupId>io.qameta.allure</groupId>
@@ -37,23 +71,30 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>3.24.2</version>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-okhttp3</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+        <!-- Selenide -->
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide-testng</artifactId>
+            <version>6.13.1</version>
+        </dependency>
+        <!-- Assertions -->
+        <dependency>
+            <groupId>io.strikt</groupId>
+            <artifactId>strikt-core</artifactId>
+            <version>0.34.1</version>
             <scope>test</scope>
         </dependency>
+        <!-- Testing Framework -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.7.1</version>
-            <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.7</version>
-            <scope>test</scope>
-        </dependency>
+        <!-- Kotlin -->
         <dependency>
             <groupId>io.github.microutils</groupId>
             <artifactId>kotlin-logging-jvm</artifactId>
@@ -67,15 +108,38 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
-            <version>RELEASE</version>
+            <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- API -->
         <dependency>
-            <groupId>org.aeonbits.owner</groupId>
-            <artifactId>owner</artifactId>
-            <version>1.0.12</version>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>retrofit</artifactId>
+            <version>${retrofit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-gson</artifactId>
+            <version>${retrofit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>4.11.0</version>
+        </dependency>
+        <!-- Test Data -->
+        <dependency>
+            <groupId>io.github.serpro69</groupId>
+            <artifactId>kotlin-faker</artifactId>
+            <version>1.14.0</version>
+        </dependency>
+        <!-- Other -->
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility-kotlin</artifactId>
         </dependency>
     </dependencies>
+
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
