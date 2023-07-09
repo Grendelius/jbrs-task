@@ -32,5 +32,5 @@ build/
 
 
 ### TC Compose files ###
-/compose/windows/teamcity_*
-/compose/linux/teamcity_*
+/teamcity_server
+/teamcity_agent
