@@ -2,6 +2,17 @@ spring:
   main:
     banner-mode: off
 
+core:
+  browser:
+    headless: true
+    timeout: 10000
+    remote:
+      active: false
+      url: http://localhost:4444/wd/hub
+  allure:
+    page-source: false
+    browser-logs: false
+
 tc:
   server:
     url: 10.5.0.5:8111

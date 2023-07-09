@@ -6,7 +6,7 @@ import com.jbrst.jbrstask.core.models.User
 data class UserData(
     private val users: List<User>
 ) {
-    fun byUsername(username: String): User = users.find { it.username == username } ?: illegalArgument(
+    fun getByUsername(username: String): User = users.find { it.username == username } ?: illegalArgument(
         "User [$username] is not found in the properties"
     )
 

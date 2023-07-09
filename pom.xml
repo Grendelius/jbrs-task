@@ -68,7 +68,6 @@
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-selenide</artifactId>
             <version>${allure.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.qameta.allure</groupId>
@@ -79,7 +78,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide-testng</artifactId>
-            <version>6.13.1</version>
+            <version>6.16.0</version>
         </dependency>
         <!-- Assertions -->
         <dependency>
