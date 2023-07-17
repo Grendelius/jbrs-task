@@ -34,3 +34,6 @@ build/
 ### TC Compose files ###
 /teamcity_server
 /teamcity_agent
+
+### Allure ###
+/.allure
