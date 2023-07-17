@@ -15,3 +15,4 @@
 
 ### Monitoring ###
 - Selenoid UI is available by the address: 'http://localhost:8083' with VNC
+- To turn on video recording: use '-Dtc.server.remote.video-recording=true' during the tests launch
