@@ -12,3 +12,6 @@
 ### How to run
 - Execute the following command `mvn test -Dtc.server.token=<your_superuser_token> && mvn allure:serve'
 - An Allure Report will be opened
+
+### Monitoring ###
+- Selenoid UI is available by the address: 'http://localhost:8083' with VNC
