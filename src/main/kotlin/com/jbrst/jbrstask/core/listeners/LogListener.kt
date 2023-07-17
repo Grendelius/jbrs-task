@@ -25,7 +25,6 @@ class LogListener : ITestListener {
             "[TEST][FAILED] `${result.method?.methodName}`. Arguments [${result.paramsAsString()}]. " +
                     "Reason: ${result.throwable?.localizedMessage}"
         }
-        AllureUtils.saveScreenshot()
     }
 
     override fun onTestSkipped(result: ITestResult) {

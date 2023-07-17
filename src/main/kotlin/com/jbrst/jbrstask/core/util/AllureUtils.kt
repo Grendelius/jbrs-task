@@ -1,12 +1,9 @@
 package com.jbrst.jbrstask.core.util
 
-import com.codeborne.selenide.Screenshots
-import io.qameta.allure.Attachment
 import mu.KLogging
 import okhttp3.internal.toImmutableMap
 import org.w3c.dom.Document
 import java.io.File
-import java.nio.file.Files
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
 import javax.xml.transform.Transformer
@@ -17,15 +14,6 @@ import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 
 object AllureUtils {
-
-    @Attachment(value = "screenshot", type = "image/png")
-    fun saveScreenshot(): ByteArray? {
-        val screenshot = Screenshots.getLastScreenshot()
-        if (screenshot != null) {
-            return Files.readAllBytes(screenshot.toPath())
-        }
-        return null
-    }
 
     fun writeUpAllureEnvironment() {
         val osName = System.getProperty("os.name");

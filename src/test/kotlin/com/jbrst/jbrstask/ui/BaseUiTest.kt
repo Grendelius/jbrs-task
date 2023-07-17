@@ -1,8 +1,8 @@
 package com.jbrst.jbrstask.ui
 
 import com.codeborne.selenide.Selenide
-import com.codeborne.selenide.WebDriverRunner
 import com.jbrst.jbrstask.BaseTest
+import com.jbrst.jbrstask.ui.config.SelenideListener
 import com.jbrst.jbrstask.ui.config.WebDriverFactory
 import com.jbrst.jbrstask.ui.config.WebDriverFactory.Browser
 import com.jbrst.jbrstask.ui.flows.BuildFlow
@@ -16,6 +16,9 @@ import org.testng.annotations.Parameters
 
 
 open class BaseUiTest : BaseTest() {
+
+    @Autowired
+    private lateinit var selenideListener: SelenideListener
 
     @Autowired
     private lateinit var webDriverFactory: WebDriverFactory
@@ -32,6 +35,7 @@ open class BaseUiTest : BaseTest() {
     @BeforeMethod
     @Parameters("browser")
     fun manageWebDriver(@Optional browser: Browser?) {
+        selenideListener.init()
         webDriverFactory.initWebDriver(browser)
     }
 
