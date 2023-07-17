@@ -1,27 +1,43 @@
 package com.jbrst.jbrstask.ui
 
-import com.codeborne.selenide.Configuration
 import com.codeborne.selenide.Selenide
+import com.codeborne.selenide.WebDriverRunner
 import com.jbrst.jbrstask.BaseTest
-import com.jbrst.jbrstask.core.UserData
+import com.jbrst.jbrstask.ui.config.WebDriverFactory
+import com.jbrst.jbrstask.ui.config.WebDriverFactory.Browser
+import com.jbrst.jbrstask.ui.flows.BuildFlow
 import com.jbrst.jbrstask.ui.flows.LoginFlow
-import org.openqa.selenium.chrome.ChromeOptions
+import com.jbrst.jbrstask.ui.flows.ProjectsFlow
 import org.springframework.beans.factory.annotation.Autowired
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
+import org.testng.annotations.Optional
+import org.testng.annotations.Parameters
+
 
 open class BaseUiTest : BaseTest() {
 
     @Autowired
-    protected lateinit var userData: UserData
+    private lateinit var webDriverFactory: WebDriverFactory
 
     @Autowired
     protected lateinit var loginFlow: LoginFlow
 
+    @Autowired
+    protected lateinit var projectsFlow: ProjectsFlow
+
+    @Autowired
+    protected lateinit var buildFlow: BuildFlow
+
     @BeforeMethod
-    fun setUpBrowser() {
-        Configuration.browserCapabilities = ChromeOptions().addArguments("--remote-allow-origins=*")
-        Selenide.open("http://localhost:8111/")
+    @Parameters("browser")
+    fun manageWebDriver(@Optional browser: Browser?) {
+        webDriverFactory.initWebDriver(browser)
+    }
+
+    @BeforeMethod
+    fun openSut() {
+        Selenide.open("/")
     }
 
     @AfterMethod

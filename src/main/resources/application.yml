@@ -5,29 +5,32 @@ spring:
 core:
   browser:
     headless: true
-    timeout: 10000
+    timeout: 20000
     remote:
-      active: false
-      url: http://localhost:4444/wd/hub
+      active: true
+      url: "http://localhost:4444/wd/hub"
+      video-recording: false
   allure:
     page-source: false
     browser-logs: false
 
 tc:
   server:
-    url: 10.5.0.5:8111
-    token: ""
+    url: "http://host.docker.internal:8111"
+    token: "" ### Super user's token. Should be stored from teamcity-server/logs/'teamcity-server.log' file
+    api:
+      host: "localhost:8111"
 
   users:
-    - username: admin
-      password: admin
+    - username: "admin" ### Admin user (should be created manually during the server's first run
+      password: "admin"
 
-    - username: ""
+    - username: "" ### Super user
       password: "${tc.server.token}"
 
   vcs:
-    - type: GIT
-      rootUrl: https://github.com/Grendelius/
-      project: sandbox.git
-      username: atolkachev
-      password:
+    - type: "GIT" ### The test GIT repository properties
+      rootUrl: "https://github.com/Grendelius/"
+      project: "sandbox"
+      username: "atolkachev"
+      password: ""

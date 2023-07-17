@@ -1,3 +1,3 @@
 package com.jbrst.jbrstask.core.models
 
-data class User(val username: String, val password: String)
+data class User(val username: String, val password: String, val email: String = "")

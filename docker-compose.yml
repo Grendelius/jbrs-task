@@ -3,65 +3,53 @@ version: "3.2"
 services:
 
   tc-server: ### the main tc-server (aka SUT)
-    image: jetbrains/teamcity-server
+    image: jetbrains/teamcity-server:latest
     container_name: teamcity-server-instance
     ports:
       - "8111:8111"
-    networks:
-      jbrs_net:
-        ipv4_address: 10.5.0.5
     volumes:
       - ./teamcity_server/datadir:/data/teamcity_server/datadir
       - ./teamcity_server/logs:/opt/teamcity/logs
 
   agent1: ### this agent exists as authorized one
-    image: jetbrains/teamcity-agent
+    image: jetbrains/teamcity-agent:latest
     privileged: true
     container_name: teamcity-agent1-instance
     volumes:
       - ./teamcity_agent/agent1/conf:/data/teamcity_agent/conf
-    networks:
-      jbrs_net:
-        ipv4_address: 10.5.0.6
-    depends_on:
+    links:
       - tc-server
     environment:
-      - SERVER_URL=tc-server:8111
+      - SERVER_URL=teamcity-server-instance:8111
       - AGENT_NAME=teamcity-agent1
       - DOCKER_IN_DOCKER=start
 
-  agent2: ### this agent exists as unauthorized one
-    image: jetbrains/teamcity-agent
-    privileged: true
-    container_name: teamcity-agent2-instance
-    volumes:
-      - ./teamcity_agent/agent2/conf:/data/teamcity_agent/conf
-    networks:
-      jbrs_net:
-        ipv4_address: 10.5.0.7
-    depends_on:
-      - tc-server
-    environment:
-      - SERVER_URL=tc-server:8111
-      - AGENT_NAME=teamcity-agent2
-      - DOCKER_IN_DOCKER=start
-  selenoid:
+#  ngrok: ### the service provides an external tunnel to the localhost
+#    image: ngrok/ngrok:latest
+#    restart: unless-stopped
+#    command: [ "start", "--all", "--config", "/etc/ngrok.yml" ]
+#    volumes:
+#      - ./ngrok.yml:/etc/ngrok.yml
+#    ports:
+#      - "4040:4040"
+
+  selenoid: ### the service provides remote run of web driver instances and more
     image: "aerokube/selenoid:latest"
     container_name: selenoid
     ports:
-      - "4445:4444"
+      - "4444:4444"
     networks:
       - selenoid
     volumes:
-      - "./:/etc/selenoid"
-      - "./target:/output"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./target:/opt/selenoid/video"
+      - ./:/etc/selenoid
+      - ./target:/output
+      - ./target/video:/opt/selenoid/video/
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - "OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/target"
-    command: [ "-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video", "-container-network", "selenoid" ]
+      - OVERRIDE_VIDEO_OUTPUT_DIR=$pwd/target/video
+    command: [ "-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video/", "-container-network", "selenoid" ]
 
-  selenoid-ui:
+  selenoid-ui: ### UI for the selenoid server
     image: "aerokube/selenoid-ui:latest"
     container_name: selenoid-ui
     links:
@@ -72,11 +60,62 @@ services:
       - selenoid
     command: [ "--selenoid-uri", "http://selenoid:4444" ]
 
+  chrome_114.0:
+    image: "selenoid/chrome:114.0"
+    container_name: chrome_114.0
+    networks:
+      - selenoid
+    links:
+      - selenoid
+      - selenoid-ui
+    depends_on:
+      - selenoid
+      - selenoid-ui
+    volumes:
+      - /dev/shm:/dev/shm
+
+  firefox_115.0:
+    image: "selenoid/firefox:115.0"
+    container_name: firefox_115.0
+    networks:
+      - selenoid
+    links:
+      - selenoid
+      - selenoid-ui
+    depends_on:
+      - selenoid
+      - selenoid-ui
+    volumes:
+      - /dev/shm:/dev/shm
+
+  edge_114.0:
+    image: "browsers/edge:114.0"
+    container_name: edge_114.0
+    networks:
+      - selenoid
+    links:
+      - selenoid
+      - selenoid-ui
+    depends_on:
+      - selenoid
+      - selenoid-ui
+    volumes:
+      - /dev/shm:/dev/shm
+
+  safari_15.0:
+    image: "browsers/safari:15.0"
+    container_name: safari_15.0
+    networks:
+      - selenoid
+    links:
+      - selenoid
+      - selenoid-ui
+    depends_on:
+      - selenoid
+      - selenoid-ui
+    volumes:
+      - /dev/shm:/dev/shm
+
 networks:
   selenoid:
-  jbrs_net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 10.5.0.0/16
-          gateway: 10.5.0.1
+    external: true

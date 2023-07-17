@@ -12,25 +12,26 @@ class LogListener : ITestListener {
 
     private fun ITestResult.paramsAsString(): String = parameters.contentToString()
 
-    override fun onTestStart(result: ITestResult?) {
-        logger.info { "[TEST][STARTING] `${result?.method?.methodName}` Arguments [${result?.paramsAsString()}]" }
+    override fun onTestStart(result: ITestResult) {
+        logger.info { "[TEST][STARTING] `${result.method?.methodName}` Arguments [${result.paramsAsString()}]" }
     }
 
-    override fun onTestSuccess(result: ITestResult?) {
-        logger.info { "[TEST][PASSED] `${result?.method?.methodName}`. Arguments [${result?.paramsAsString()}]" }
+    override fun onTestSuccess(result: ITestResult) {
+        logger.info { "[TEST][PASSED] `${result.method?.methodName}`. Arguments [${result.paramsAsString()}]" }
     }
 
-    override fun onTestFailure(result: ITestResult?) {
+    override fun onTestFailure(result: ITestResult) {
         logger.info {
-            "[TEST][FAILED] `${result?.method?.methodName}`. Arguments [${result?.paramsAsString()}]. " +
-                    "Reason: ${result?.throwable?.localizedMessage}"
+            "[TEST][FAILED] `${result.method?.methodName}`. Arguments [${result.paramsAsString()}]. " +
+                    "Reason: ${result.throwable?.localizedMessage}"
         }
+        AllureUtils.saveScreenshot()
     }
 
-    override fun onTestSkipped(result: ITestResult?) {
+    override fun onTestSkipped(result: ITestResult) {
         logger.info {
-            "[TEST][SKIPPED] `${result?.method?.methodName}`. Arguments [${result?.paramsAsString()}]. " +
-                    "Reason: ${result?.throwable?.message}"
+            "[TEST][SKIPPED] `${result.method.methodName}`. Arguments [${result.paramsAsString()}]. " +
+                    "Reason: ${result.throwable.message}"
         }
     }
 

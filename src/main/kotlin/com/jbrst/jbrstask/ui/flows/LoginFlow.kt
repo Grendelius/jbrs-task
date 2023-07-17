@@ -7,6 +7,7 @@ import com.codeborne.selenide.Selectors.byXpath
 import com.codeborne.selenide.Selenide.element
 import com.jbrst.jbrstask.core.models.User
 import com.jbrst.jbrstask.ui.core.Page
+import io.qameta.allure.Step
 import mu.KLogging
 import org.springframework.stereotype.Component
 
@@ -15,6 +16,7 @@ class LoginFlow {
 
     companion object : KLogging()
 
+    @Step("Login as {0}")
     fun loggedAs(user: User) {
         logger.info { "Logging in as the '${user.username}' user" }
         Page.on<LoginPage>()
@@ -54,13 +56,13 @@ class LoginPage : Page() {
         return this
     }
 
-    fun errorMessageDisplayed(errorMsgText: String): LoginPage {
+    fun errorMessageIsDisplayed(errorMsgText: String): LoginPage {
         errMsgBlock.shouldHave(ownText(errorMsgText))
         return this
     }
 
     override fun validate(): LoginPage {
-        logger.debug { "Checking the login page is opened" }
+        logger.debug { "Checking the login page is open." }
         header.shouldBe(visible)
         return this
     }

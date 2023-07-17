@@ -1,0 +1,45 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Team City Checks" verbose="1" parallel="classes" thread-count="2">
+
+    <test name="Safari UI suite">
+        <parameter name="browser" value="SAFARI"/>
+        <packages>
+            <package name="com.jbrst.jbrstask.ui"/>
+        </packages>
+    </test>
+
+    <test name="Chrome Mobile UI suite">
+        <parameter name="browser" value="CHROME_MOBILE"/>
+        <packages>
+            <package name="com.jbrst.jbrstask.ui"/>
+        </packages>
+    </test>
+
+    <test name="Chrome UI suite">
+        <parameter name="browser" value="CHROME"/>
+        <packages>
+            <package name="com.jbrst.jbrstask.ui"/>
+        </packages>
+    </test>
+
+    <test name="Firefox UI suite">
+        <parameter name="browser" value="FIREFOX"/>
+        <packages>
+            <package name="com.jbrst.jbrstask.ui"/>
+        </packages>
+    </test>
+
+    <test name="Microsoft Edge UI suite">
+        <parameter name="browser" value="EDGE"/>
+        <packages>
+            <package name="com.jbrst.jbrstask.ui"/>
+        </packages>
+    </test>
+
+<!--    <test name="API suite">-->
+<!--        <packages>-->
+<!--            <package name="com.jbrst.jbrstask.api"/>-->
+<!--        </packages>-->
+<!--    </test>-->
+
+</suite>

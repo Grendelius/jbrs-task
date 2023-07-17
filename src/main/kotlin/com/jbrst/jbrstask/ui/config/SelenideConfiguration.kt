@@ -12,14 +12,21 @@ import com.codeborne.selenide.Configuration as SelenideConfig
 open class SelenideConfiguration(env: Environment) {
 
     init {
+        SelenideConfig.baseUrl = env.getProperty("tc.server.url")
         SelenideConfig.headless = env.getProperty("core.browser.headless")?.toBooleanStrict() ?: false
-        SelenideConfig.timeout = env.getProperty("core.browser.timeout", "4500").toLong()
+        SelenideConfig.timeout = env.getProperty("core.browser.timeout", "10000").toLong()
         SelenideConfig.reopenBrowserOnFail = true
+
+        val isRemoteRun = env.getProperty("core.browser.remote.active")?.toBooleanStrict() ?: false
+
+        if (isRemoteRun) {
+            SelenideConfig.remote = env.getProperty("core.browser.remote.url")
+        }
 
         val allureSelenide = AllureSelenide().apply {
             screenshots(true)
-                .includeSelenideSteps(false)
-                .savePageSource(env.getProperty("core.allure.page-source").toBoolean())
+            includeSelenideSteps(true)
+            savePageSource(env.getProperty("core.allure.page-source").toBoolean())
             when {
                 env.getProperty("core.allure.browser-logs").toBoolean() -> {
                     enableLogs(LogType.BROWSER, Level.ALL)
@@ -28,7 +35,7 @@ open class SelenideConfiguration(env: Environment) {
             }
         }
 
-        SelenideLogger.addListener("allure", allureSelenide)
+        SelenideLogger.addListener("AllureSelenide", allureSelenide)
     }
 
 }

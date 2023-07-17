@@ -14,10 +14,11 @@
         <maven.compiler.target>19</maven.compiler.target>
         <maven.compiler.source>19</maven.compiler.source>
         <aspectj.version>1.9.19</aspectj.version>
-        <allure.version>2.22.0</allure.version>
+        <allure.version>2.23.0</allure.version>
         <kotlin.version>1.9.0</kotlin.version>
         <retrofit.version>2.9.0</retrofit.version>
         <spring.boot.version>3.1.1</spring.boot.version>
+        <test.suite.xml>testng.xml</test.suite.xml>
     </properties>
 
     <dependencyManagement>
@@ -46,6 +47,10 @@
                     <groupId>org.junit.vintage</groupId>
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-api</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -60,9 +65,13 @@
         <!-- Allure -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-java-commons</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
             <version>${allure.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.qameta.allure</groupId>
@@ -85,7 +94,6 @@
             <groupId>io.strikt</groupId>
             <artifactId>strikt-core</artifactId>
             <version>0.34.1</version>
-            <scope>test</scope>
         </dependency>
         <!-- Testing Framework -->
         <dependency>
@@ -125,6 +133,10 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>logging-interceptor</artifactId>
             <version>4.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
         </dependency>
         <!-- Test Data -->
         <dependency>
@@ -176,6 +188,7 @@
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
+                    <suiteXmlFiles>${test.suite.xml}}</suiteXmlFiles>
                 </configuration>
                 <dependencies>
                     <dependency>

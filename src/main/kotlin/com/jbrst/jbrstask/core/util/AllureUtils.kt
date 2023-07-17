@@ -1,9 +1,12 @@
 package com.jbrst.jbrstask.core.util
 
-import com.google.common.collect.ImmutableMap
+import com.codeborne.selenide.Screenshots
+import io.qameta.allure.Attachment
 import mu.KLogging
+import okhttp3.internal.toImmutableMap
 import org.w3c.dom.Document
 import java.io.File
+import java.nio.file.Files
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.parsers.ParserConfigurationException
 import javax.xml.transform.Transformer
@@ -15,21 +18,36 @@ import javax.xml.transform.stream.StreamResult
 
 object AllureUtils {
 
+    @Attachment(value = "screenshot", type = "image/png")
+    fun saveScreenshot(): ByteArray? {
+        val screenshot = Screenshots.getLastScreenshot()
+        if (screenshot != null) {
+            return Files.readAllBytes(screenshot.toPath())
+        }
+        return null
+    }
+
     fun writeUpAllureEnvironment() {
-        val os = System.getProperty("os.name");
+        val osName = System.getProperty("os.name");
+        val osVersion = System.getProperty("os.version");
+        AllureEnvironmentWriter.writeEnvInfo(
+            environmentValuesSet = mapOf(
+                "OS" to osName,
+                "Version" to osVersion
+            ).toImmutableMap()
+        )
     }
 
     private object AllureEnvironmentWriter : KLogging() {
 
-        private const val ALLURE_RESULTS_DIR = "/build/allure-results"
+        private const val ALLURE_RESULTS_DIR = "/target/allure-results/"
         private const val ENVIRONMENT_FILE = "environment.xml"
         private val TRANSFORMER = prepareTransformer()
 
         fun writeEnvInfo(
-            environmentValuesSet: ImmutableMap<String, String>,
+            environmentValuesSet: Map<String, String>,
             customResultsPath: String = System.getProperty("user.dir") + ALLURE_RESULTS_DIR
         ) {
-            // Write the content into xml file
             val allureResultsDir = File(customResultsPath)
             if (!allureResultsDir.exists()) {
                 allureResultsDir.mkdirs()
@@ -44,7 +62,7 @@ object AllureUtils {
             }
         }
 
-        private fun createDocument(environmentValuesSet: ImmutableMap<String, String>): Document {
+        private fun createDocument(environmentValuesSet: Map<String, String>): Document {
             try {
                 val docFactory = DocumentBuilderFactory.newInstance()
                 val docBuilder = docFactory.newDocumentBuilder()

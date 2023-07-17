@@ -1,6 +1,15 @@
 package com.jbrst.jbrstask.api
 
 import com.jbrst.jbrstask.BaseTest
+import org.testng.annotations.AfterSuite
 
-class BaseApiTest: BaseTest() {
+open class BaseApiTest : BaseTest() {
+
+    @AfterSuite
+    fun cleanup() {
+        testDataStateHelper.cleanCreatedProjects(admin)
+        testDataStateHelper.cleanExtraUsers(admin)
+    }
+
+
 }

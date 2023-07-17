@@ -1,0 +1,19 @@
+authtoken: 1aAcaeiyugxItTlXlNKAkC7lNgw_4yfbsrJo8HS3JmUSxSnUB
+version: "2"
+console_ui: true
+console_ui_color: transparent
+heartbeat_interval: 1m
+heartbeat_tolerance: 5s
+inspect_db_size: 104857600 # 100mb
+log_level: info
+log_format: json
+web_allow_hosts:
+  - tc.ngrok.app
+  - localhost
+  - 127.0.0.1
+
+tunnels:
+  server:
+    addr: host.docker.internal:8111
+    domain: tc.ngrok.app
+    proto: http

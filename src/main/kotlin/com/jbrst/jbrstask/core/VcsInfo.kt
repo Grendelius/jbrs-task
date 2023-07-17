@@ -5,6 +5,9 @@ enum class VcsType {
     GIT_LAB
 }
 
+fun VcsRepo.fullUrl(): String =
+    "${rootUrl}${project}.${type.name.lowercase()}"
+
 data class VcsRepo(
     val type: VcsType,
     val rootUrl: String,

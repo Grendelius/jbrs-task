@@ -10,5 +10,8 @@ data class UserData(
         "User [$username] is not found in the properties"
     )
 
+    fun admin(): User = users.first { it.username == "admin" }
+
     fun superAdmin(): User = users.first { it.username.isBlank() }
+
 }
