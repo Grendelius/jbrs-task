@@ -43,10 +43,10 @@ services:
     volumes:
       - ./:/etc/selenoid
       - ./target:/output
-      - ./target/video:/opt/selenoid/video/
+      - ./target:/opt/selenoid/video/
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - OVERRIDE_VIDEO_OUTPUT_DIR=$pwd/target/video
+      - OVERRIDE_VIDEO_OUTPUT_DIR=$pwd/target
     command: [ "-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video/", "-container-network", "selenoid" ]
 
   selenoid-ui: ### UI for the selenoid server
