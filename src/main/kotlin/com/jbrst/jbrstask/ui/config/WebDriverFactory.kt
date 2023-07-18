@@ -26,7 +26,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 /**
- * Creates and set up a custom web driver base on browser
+ * Creates and set up a custom web driver which is based on a Browser
  */
 @Component
 class WebDriverFactory {
