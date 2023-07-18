@@ -7,12 +7,12 @@
 - Wait until the TC server is established
 - Choose 'HDBC' db driver during the initial server setup
 - Create the Admin with the following credentials: "admin:admin"
-- Read a Super user token from the './teamcity-server/logs/teamcity-server.log' file and copy it to the buffer
+- Read a Super user token from the './teamcity-server/logs/teamcity-server.log' file and copy it to buffer
 
 ### How to run
-- Execute the following command `mvn test -Dtc.server.token=<your_superuser_token> && mvn allure:serve'
-- An Allure Report will be opened
+- Execute the following command `mvn test -Dtc.server.token=<your_superuser_token> && mvn allure:serve`
+- Wait until the tests finished
 
 ### Monitoring ###
-- Selenoid UI is available by the address: 'http://localhost:8083' with VNC
-- To turn on video recording: use '-Dtc.server.remote.video-recording=true' during the tests launch
+- Selenoid UI is available by the address: `http://localhost:8083` with VNC
+- To turn on video recording: use `-Dtc.server.remote.video-recording=true` during the tests launch like `mvn test -Dtc.server.token=<your_superuser_token> -Dtc.server.remote.video-recording=true && mvn allure:serve`
