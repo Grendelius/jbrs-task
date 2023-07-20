@@ -10,7 +10,7 @@ class CustomInterceptor : IMethodInterceptor {
     override fun intercept(list: MutableList<IMethodInstance>, cntx: ITestContext): MutableList<IMethodInstance> {
         return list.filter {
             !(it.method.constructorOrMethod.method.isAnnotationPresent(DesktopTest::class.java)
-                    && cntx.currentXmlTest.getParameter("browser").contains("_MOBILE"))
+                    && cntx.currentXmlTest.getParameter("browser")?.contains("_MOBILE") == true)
         }.toMutableList()
     }
 

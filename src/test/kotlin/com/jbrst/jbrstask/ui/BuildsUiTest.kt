@@ -5,10 +5,7 @@ import com.jbrst.jbrstask.api.models.*
 import com.jbrst.jbrstask.core.annotations.DesktopTest
 import io.qameta.allure.*
 import io.qameta.allure.SeverityLevel.CRITICAL
-import org.testng.annotations.AfterMethod
-import org.testng.annotations.BeforeClass
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
+import org.testng.annotations.*
 import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
@@ -18,7 +15,6 @@ import strikt.assertions.isEqualTo
 @Epic("Builds")
 @Features(value = [Feature("Build execution")])
 class BuildsUiTest : BaseUiTest() {
-
 
     companion object {
         private lateinit var projectApi: ProjectApi
@@ -35,6 +31,11 @@ class BuildsUiTest : BaseUiTest() {
         buildTypeApi = apiServiceCreator.createService(BuildTypeApi::class.java, admin)
     }
 
+    @AfterClass
+    fun cleanup() {
+        testDataStateHelper.cleanCreatedProjects(admin)
+    }
+
     @BeforeMethod
     fun login() {
         loginFlow.loggedAs(admin)
@@ -42,8 +43,7 @@ class BuildsUiTest : BaseUiTest() {
     }
 
     @AfterMethod
-    fun cleanup() {
-        testDataStateHelper.cleanCreatedProjects(admin)
+    fun unauthorizeAllAgents() {
         testDataStateHelper.unauthorizedAllAgents(admin)
 
     }
