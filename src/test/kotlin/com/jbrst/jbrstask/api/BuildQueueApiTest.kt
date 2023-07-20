@@ -71,7 +71,7 @@ class BuildQueueApiTest : BaseApiTest() {
         // Start the build via API
         BuildQueueApiAssistant.startBuild(build, buildQueueApi)
 
-        //Checkin that the build in the queue
+        //Checking that the build is in the queue
         BuildQueueApiAssistant.getQueuedBuildsByBuildTypeId(testBuildType.id, buildQueueApi).also {
             expectThat(it?.build)
                 .isA<List<BuildDto>>()

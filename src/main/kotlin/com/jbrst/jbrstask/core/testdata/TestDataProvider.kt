@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class TestDataProvider(val userData: UserData, val vcsData: VcsData) {
+class TestDataProvider(val userData: UserData, private val vcsData: VcsData) {
 
     @Value("\${tc.server.api.host}")
     private lateinit var apiHost: String
 
-    internal val faker = faker { }
+    private val faker = faker { }
 
     fun fakeUsername(): String = faker.name.firstName()
 
@@ -28,8 +28,6 @@ class TestDataProvider(val userData: UserData, val vcsData: VcsData) {
     fun fakeUser(): User = User(fakeUsername(), fakePassword(), fakeEmail())
 
     fun fakeProjectName(): String = RandomStringUtils.randomAlphabetic(5)
-
-    fun fakeProjectId(): String = fakeProjectName().replaceFirstChar { it.titlecaseChar() }
 
     fun fakeBuildName(): String = faker.app.name()
 
@@ -45,7 +43,7 @@ class TestDataProvider(val userData: UserData, val vcsData: VcsData) {
         val buildConfigName = "UnitTests"
         val buildId = "${projectName}_${buildConfigName}"
         val buildHref = "/app/rest/buildTypes/id:${buildId}"
-        val buildWebUrl = "https1`://$apiHost/viewType.html?buildTypeId=${buildId}"
+        val buildWebUrl = "http://$apiHost/viewType.html?buildTypeId=${buildId}"
 
         return BuildTypeDto(
             id = buildId,
@@ -80,7 +78,7 @@ class TestDataProvider(val userData: UserData, val vcsData: VcsData) {
     fun buildVcsRootEntry(vscRoot: VcsRootDto): VcsRootEntry {
         return VcsRootEntry(
             id = vscRoot.id,
-            true,
+            inherited = true,
             vcsRoot = vscRoot,
             checkoutRules = ""
         )
