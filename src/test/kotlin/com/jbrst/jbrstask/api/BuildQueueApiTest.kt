@@ -6,7 +6,6 @@ import com.jbrst.jbrstask.api.models.BuildTypeDto
 import com.jbrst.jbrstask.api.models.NewProjectDescriptionDto
 import io.qameta.allure.*
 import io.qameta.allure.SeverityLevel.CRITICAL
-import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeClass
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -19,6 +18,7 @@ import strikt.assertions.*
 class BuildQueueApiTest : BaseApiTest() {
 
     private lateinit var testBuildType: BuildTypeDto
+
     companion object {
         private lateinit var projectApi: ProjectApi
         private lateinit var buildApi: BuildApi
@@ -75,7 +75,7 @@ class BuildQueueApiTest : BaseApiTest() {
         BuildQueueApiAssistant.getQueuedBuildsByBuildTypeId(testBuildType.id, buildQueueApi).also {
             expectThat(it?.build)
                 .isA<List<BuildDto>>()
-                .filter { build: BuildDto -> build.buildTypeId == testBuildType.id && build.state == "queued"}
+                .filter { build: BuildDto -> build.buildTypeId == testBuildType.id && build.state == "queued" }
                 .isNotEmpty()
         }
     }

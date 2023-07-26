@@ -84,7 +84,7 @@ class ProjectsUiTest : BaseUiTest() {
     @DesktopTest
     fun userIsAbleToDeleteProjectTest() {
         val projectName = testData.fakeProjectName()
-        val projectId = projectName.uppercase()
+        val projectId = projectName.replaceFirstChar { it.titlecaseChar() }
 
         val newProject = NewProjectDescriptionDto(projectId, projectName)
 
