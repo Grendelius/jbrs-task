@@ -90,8 +90,7 @@ class WebDriverFactory {
         return FirefoxOptions().apply {
             merge(basicCapabilities(FIREFOX.browserName()))
             addSelenoidOptions(selenoidOptions())
-//            setCapability("acceptInsecureCerts", true)
-        }
+         }
     }
 
     private fun edgeOptions(): EdgeOptions {

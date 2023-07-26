@@ -5,20 +5,20 @@
       "113.0": {
         "image": "selenoid/chrome:113.0",
         "port": "4444",
-        "tmpfs": {
-          "/tmp": "size=512m"
-        },
         "path": "/",
+        "tmpfs": {
+          "/tmp": "size=768m"
+        },
         "shmSize": 1073741824
       },
       "114.0": {
         "image": "selenoid/chrome:114.0",
         "port": "4444",
         "tmpfs": {
-          "/tmp": "size=512m"
+          "/tmp": "size=768m"
         },
         "path": "/",
-        "shmSize" : 1073741824
+        "shmSize": 1073741824
       }
     }
   },
@@ -28,11 +28,11 @@
       "15.0": {
         "image": "browsers/safari:15.0",
         "port": "4444",
-        "tmpfs": {
-          "/tmp": "size=512m"
-        },
         "path": "/",
-        "shmSize" : 1073741824
+        "tmpfs": {
+          "/tmp": "size=768m"
+        },
+        "shmSize": 1073741824
       }
     }
   },
@@ -44,7 +44,7 @@
         "port": "4444",
         "path": "/wd/hub",
         "tmpfs": {
-          "/tmp": "size=512m"
+          "/tmp": "size=768m"
         },
         "shmSize": 1073741824
       },
@@ -53,7 +53,7 @@
         "port": "4444",
         "path": "/wd/hub",
         "tmpfs": {
-          "/tmp": "size=512m"
+          "/tmp": "size=768m"
         },
         "shmSize": 1073741824
       }
@@ -65,11 +65,11 @@
       "114.0": {
         "image": "browsers/edge:114.0",
         "port": "4444",
+        "path": "/",
         "tmpfs": {
-          "/tmp": "size=512m"
+          "/tmp": "size=768m"
         },
-        "shmSize": 1073741824,
-        "path": "/"
+        "shmSize": 1073741824
       }
     }
   }

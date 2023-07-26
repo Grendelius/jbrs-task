@@ -31,11 +31,6 @@ class BuildsUiTest : BaseUiTest() {
         buildTypeApi = apiServiceCreator.createService(BuildTypeApi::class.java, admin)
     }
 
-    @AfterClass
-    fun cleanup() {
-        testDataStateHelper.cleanCreatedProjects(admin)
-    }
-
     @BeforeMethod
     fun login() {
         loginFlow.loggedAs(admin)

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests
+import org.testng.annotations.AfterSuite
 import org.testng.annotations.BeforeClass
 import org.testng.annotations.Listeners
 
@@ -33,6 +34,12 @@ open class BaseTest : AbstractTestNGSpringContextTests() {
     fun setUpUsers() {
         admin = testData.userData.admin()
         superAdmin = testData.userData.superAdmin()
+    }
+
+    @AfterSuite
+    fun cleanup() {
+        testDataStateHelper.cleanCreatedProjects(admin)
+        testDataStateHelper.cleanExtraUsers(admin)
     }
 
 }

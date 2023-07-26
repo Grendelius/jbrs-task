@@ -11,7 +11,6 @@ import com.jbrst.jbrstask.ui.flows.DiscoverRunnersPage
 import com.jbrst.jbrstask.ui.flows.EditBuildRunnersPage
 import io.qameta.allure.*
 import io.qameta.allure.SeverityLevel.CRITICAL
-import org.testng.annotations.AfterClass
 import org.testng.annotations.BeforeClass
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -31,11 +30,6 @@ class ProjectsUiTest : BaseUiTest() {
     @BeforeClass
     fun initServicesAndTestUsers() {
         projectApi = apiServiceCreator.createService(ProjectApi::class.java, admin)
-    }
-
-    @AfterClass
-    fun cleanup() {
-        testDataStateHelper.cleanCreatedProjects(admin)
     }
 
     @BeforeMethod

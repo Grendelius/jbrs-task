@@ -85,8 +85,6 @@ services:
     depends_on:
       - selenoid
       - selenoid-ui
-    volumes:
-      - /dev/shm:/dev/shm
 
   edge_114.0:
     image: "browsers/edge:114.0"
@@ -99,8 +97,6 @@ services:
     depends_on:
       - selenoid
       - selenoid-ui
-    volumes:
-      - /dev/shm:/dev/shm
 
   safari_15.0:
     image: "browsers/safari:15.0"
@@ -113,8 +109,6 @@ services:
     depends_on:
       - selenoid
       - selenoid-ui
-    volumes:
-      - /dev/shm:/dev/shm
 
 networks:
   selenoid:
