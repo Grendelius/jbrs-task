@@ -5,10 +5,10 @@ import com.jbrst.jbrstask.ui.Metrics.PIXEL_RATIO
 import com.jbrst.jbrstask.ui.Metrics.WIDTH
 
 
-object Metrics {
-    internal const val WIDTH = "width"
-    internal const val HEIGHT = "height"
-    internal const val PIXEL_RATIO = "pixelRatio"
+private object Metrics {
+    const val WIDTH = "width"
+    const val HEIGHT = "height"
+    const val PIXEL_RATIO = "pixelRatio"
 }
 
 enum class MobileDevice(
