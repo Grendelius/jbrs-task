@@ -23,13 +23,15 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.net.URI
 import java.time.LocalDateTime
-import java.util.*
 
 /**
  * Creates and set up a custom web driver which is based on a Browser
  */
 @Component
 class WebDriverFactory {
+
+    @Value("\${core.browser.remote.active}")
+    private lateinit var isRemote: String
 
     @Value("\${core.browser.remote.url}")
     private lateinit var remoteUrl: String
@@ -52,13 +54,15 @@ class WebDriverFactory {
 
     fun initWebDriver(browser: Browser?) {
         logger.info { "Driver initialization..." }
-        when (browser) {
-            CHROME -> setupWebDriverManager(remoteDriver(chromeOptions()), CHROME)
-            CHROME_MOBILE -> setupWebDriverManager(remoteDriver(chromeMobileOptions()), CHROME_MOBILE)
-            SAFARI -> setupWebDriverManager(remoteDriver(safariOptions()), SAFARI)
-            FIREFOX -> setupWebDriverManager(remoteDriver(firefoxOptions()), FIREFOX)
-            EDGE -> setupWebDriverManager(remoteDriver(edgeOptions()), EDGE)
-            else -> setupWebDriverManager(remoteDriver())
+        if (isRemote.toBooleanStrict()) {
+            when (browser) {
+                CHROME -> setupWebDriverManager(remoteDriver(chromeOptions()), CHROME)
+                CHROME_MOBILE -> setupWebDriverManager(remoteDriver(chromeMobileOptions()), CHROME_MOBILE)
+                SAFARI -> setupWebDriverManager(remoteDriver(safariOptions()), SAFARI)
+                FIREFOX -> setupWebDriverManager(remoteDriver(firefoxOptions()), FIREFOX)
+                EDGE -> setupWebDriverManager(remoteDriver(edgeOptions()), EDGE)
+                else -> setupWebDriverManager(remoteDriver())
+            }
         }
     }
 
@@ -90,7 +94,7 @@ class WebDriverFactory {
         return FirefoxOptions().apply {
             merge(basicCapabilities(FIREFOX.browserName()))
             addSelenoidOptions(selenoidOptions())
-         }
+        }
     }
 
     private fun edgeOptions(): EdgeOptions {

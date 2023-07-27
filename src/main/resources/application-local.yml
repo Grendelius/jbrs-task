@@ -1,0 +1,15 @@
+core:
+  browser:
+    headless: "false"
+    timeout: 40000
+    remote:
+      active: "false"
+  allure:
+    page-source: "false"
+    browser-logs: "false"
+
+tc:
+  server:
+    url: "http://localhost:8111"
+    api:
+      host: "localhost:8111"

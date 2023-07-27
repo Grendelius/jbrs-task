@@ -4,15 +4,15 @@ spring:
 
 core:
   browser:
-    headless: true
+    headless: "true"
     timeout: 40000
     remote:
-      active: true
+      active: "true"
       url: "http://localhost:4444/wd/hub"
-      video-recording: false
+      video-recording: "false"
   allure:
-    page-source: false
-    browser-logs: false
+    page-source: "false"
+    browser-logs: "false"
 
 tc:
   server:
