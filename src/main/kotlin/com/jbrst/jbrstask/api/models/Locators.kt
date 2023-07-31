@@ -3,7 +3,7 @@ package com.jbrst.jbrstask.api.models
 
 data class LocatorDto(val locator: String)
 
-class Locators(vararg val locators: Locator) {
+class Locators(private vararg val locators: Locator) {
 
     override fun toString(): String {
         return if (locators.size > 1) locators.joinToString(",") else locators[0].toString()
@@ -11,7 +11,7 @@ class Locators(vararg val locators: Locator) {
 
 }
 
-class BuildQueueLocators(vararg val locators: BuildQueueLocator) {
+class BuildQueueLocators(private vararg val locators: BuildQueueLocator) {
 
     override fun toString(): String {
         return if (locators.size > 1) locators.joinToString(",") else locators[0].toString()
