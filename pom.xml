@@ -16,8 +16,11 @@
         <aspectj.version>1.9.19</aspectj.version>
         <allure.version>2.23.0</allure.version>
         <kotlin.version>1.9.0</kotlin.version>
+        <kotlin.code.style>official</kotlin.code.style>
+        <kotlin.compiler.languageVersion>1.9</kotlin.compiler.languageVersion>
+        <kotlin.compiler.apiVersion>1.9</kotlin.compiler.apiVersion>
         <retrofit.version>2.9.0</retrofit.version>
-        <spring.boot.version>3.1.1</spring.boot.version>
+        <spring.boot.version>3.1.2</spring.boot.version>
         <test.suite.xml>testng.xml</test.suite.xml>
     </properties>
 
@@ -148,11 +151,6 @@
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility-kotlin</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>2.0</version>
         </dependency>
     </dependencies>
 
