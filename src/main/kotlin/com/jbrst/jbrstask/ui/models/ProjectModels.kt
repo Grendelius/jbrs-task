@@ -12,5 +12,4 @@ data class ManualProjectBuildEntry(
     val projectId: String,
     val projectName: String,
     val description: String
-) :
-    AbstractProjectBuildEntry()
+) : AbstractProjectBuildEntry()
