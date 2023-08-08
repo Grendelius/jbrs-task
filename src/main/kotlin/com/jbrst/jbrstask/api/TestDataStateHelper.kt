@@ -1,9 +1,10 @@
-package com.jbrst.jbrstask.api.assistants
+package com.jbrst.jbrstask.api
 
-import com.jbrst.jbrstask.api.AgentApi
-import com.jbrst.jbrstask.api.ProjectApi
-import com.jbrst.jbrstask.api.UsersApi
+import com.jbrst.jbrstask.api.client.AgentApi
+import com.jbrst.jbrstask.api.client.ProjectApi
+import com.jbrst.jbrstask.api.client.UsersApi
 import com.jbrst.jbrstask.api.models.*
+import com.jbrst.jbrstask.core.UserData
 import com.jbrst.jbrstask.core.isOk
 import com.jbrst.jbrstask.core.models.User
 import io.qameta.allure.Step
@@ -14,10 +15,10 @@ import strikt.assertions.isTrue
 
 
 @Component
-class TestDataStateHelper(private val apiServiceCreator: ApiServiceCreator) {
+class TestDataStateHelper(private val apiServiceCreator: ApiServiceCreator, private val userData: UserData) {
 
     @Step("Clean up the created projects")
-    fun cleanCreatedProjects(invoker: User) {
+    fun cleanCreatedProjects(invoker: User = userData.superAdmin()) {
         val api = apiServiceCreator.createService(ProjectApi::class.java, invoker)
 
         val existingProjects = api.listProjects()
@@ -31,7 +32,7 @@ class TestDataStateHelper(private val apiServiceCreator: ApiServiceCreator) {
     }
 
     @Step("Clean up the created user accounts")
-    fun cleanExtraUsers(invoker: User) {
+    fun cleanExtraUsers(invoker: User = userData.superAdmin()) {
         val api = apiServiceCreator.createService(UsersApi::class.java, invoker)
 
         val extraUsers = api.listUsers()
@@ -44,7 +45,7 @@ class TestDataStateHelper(private val apiServiceCreator: ApiServiceCreator) {
     }
 
     @Step("Clean up the created projects")
-    fun unauthorizedAllAgents(invoker: User) {
+    fun unauthorizedAllAgents(invoker: User = userData.superAdmin()) {
         val api = apiServiceCreator.createService(AgentApi::class.java, invoker)
         val locators = Locators(Connected(value = "true"), Authorized(value = "true"))
         val authorizedAgents = api.getAgents(locators)
@@ -56,7 +57,7 @@ class TestDataStateHelper(private val apiServiceCreator: ApiServiceCreator) {
     }
 
     @Step("Authorize all available agents")
-    fun authorizedAllAgents(invoker: User) {
+    fun authorizedAllAgents(invoker: User = userData.superAdmin()) {
         val api = apiServiceCreator.createService(AgentApi::class.java, invoker)
         val locators = Locators(Connected(value = "true"), Authorized(value = "false"))
         val authorizedAgents = api.getAgents(locators)
@@ -68,7 +69,7 @@ class TestDataStateHelper(private val apiServiceCreator: ApiServiceCreator) {
     }
 
     @Step("Enable all available agents")
-    fun enableAllAgents(invoker: User) {
+    fun enableAllAgents(invoker: User = userData.superAdmin()) {
         val api = apiServiceCreator.createService(AgentApi::class.java, invoker)
         val locators = Locators(Connected(value = "true"), Enabled(value = "false"))
         val authorizedAgents = api.getAgents(locators)

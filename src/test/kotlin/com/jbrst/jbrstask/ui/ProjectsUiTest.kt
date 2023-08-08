@@ -1,7 +1,5 @@
 package com.jbrst.jbrstask.ui
 
-import com.jbrst.jbrstask.api.ProjectApi
-import com.jbrst.jbrstask.api.ProjectsApiAssistant
 import com.jbrst.jbrstask.api.models.NewProjectDescriptionDto
 import com.jbrst.jbrstask.api.models.ProjectDetailsDto
 import com.jbrst.jbrstask.core.annotations.DesktopTest
@@ -11,7 +9,6 @@ import com.jbrst.jbrstask.ui.flows.DiscoverRunnersPage
 import com.jbrst.jbrstask.ui.flows.EditBuildRunnersPage
 import io.qameta.allure.*
 import io.qameta.allure.SeverityLevel.CRITICAL
-import org.testng.annotations.BeforeClass
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import strikt.api.expectThat
@@ -23,18 +20,9 @@ import strikt.assertions.isEqualTo
 @Features(value = [Feature("Project Management")])
 class ProjectsUiTest : BaseUiTest() {
 
-    companion object {
-        private lateinit var projectApi: ProjectApi
-    }
-
-    @BeforeClass
-    fun initServicesAndTestUsers() {
-        projectApi = apiServiceCreator.createService(ProjectApi::class.java, admin)
-    }
-
     @BeforeMethod
     fun login() {
-        loginFlow.loggedAs(admin)
+        loginFlow.loggedAs(testData.userData.superAdmin())
     }
 
     @Test
@@ -70,7 +58,7 @@ class ProjectsUiTest : BaseUiTest() {
             .successMessageIsDisplayed(stepAddedMsg)
 
         // Checking that the project is exising via API
-        ProjectsApiAssistant.getProject(projectId, projectApi).also {
+        projectAssistant.getProject(projectId).also {
             expectThat(it).isA<ProjectDetailsDto>()
                 .and {
                     get { projectName }.isEqualTo(projectName)
@@ -95,7 +83,7 @@ class ProjectsUiTest : BaseUiTest() {
         """.trimIndent()
 
         // Create a new project via API
-        ProjectsApiAssistant.createProject(newProject, projectApi)
+        projectAssistant.createProject(newProject)
 
         // Delete the project via UI
         projectsFlow
@@ -103,7 +91,7 @@ class ProjectsUiTest : BaseUiTest() {
             .projectDeletedMessageIsDisplayed(deletedMsg)
 
         // Check project is deleted via API
-        val response = ProjectsApiAssistant.getProject_(projectId, projectApi)
+        val response = projectAssistant.getProject_(projectId)
 
         expectThat(response).isNotFound()
     }

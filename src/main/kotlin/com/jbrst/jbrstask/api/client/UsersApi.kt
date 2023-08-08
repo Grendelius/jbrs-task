@@ -1,4 +1,4 @@
-package com.jbrst.jbrstask.api
+package com.jbrst.jbrstask.api.client
 
 import com.jbrst.jbrstask.api.constants.ACCEPT_DEFAULT
 import com.jbrst.jbrstask.api.constants.CONTENT_TYPE_DEFAULT

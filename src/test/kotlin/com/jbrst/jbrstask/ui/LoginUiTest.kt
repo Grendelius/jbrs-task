@@ -15,13 +15,13 @@ class LoginUiTest : BaseUiTest() {
     @Test
     @Severity(CRITICAL)
     fun superAdminUserIsAbleToLoginToServerTest() {
-        loginFlow.loggedAs(user = superAdmin)
+        loginFlow.loggedAs(user = testData.userData.superAdmin())
     }
 
     @Test
     @Severity(CRITICAL)
     fun regularUserIsAbleToLoginToServerTest() {
-        loginFlow.loggedAs(user = admin)
+        loginFlow.loggedAs(user = testData.userData.admin())
     }
 
     @Test

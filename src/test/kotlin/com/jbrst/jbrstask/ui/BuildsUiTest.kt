@@ -1,11 +1,14 @@
 package com.jbrst.jbrstask.ui
 
-import com.jbrst.jbrstask.api.*
-import com.jbrst.jbrstask.api.models.*
+import com.jbrst.jbrstask.api.models.BuildDto
+import com.jbrst.jbrstask.api.models.NewProjectDescriptionDto
+import com.jbrst.jbrstask.api.models.PropertiesDto
 import com.jbrst.jbrstask.core.annotations.DesktopTest
 import io.qameta.allure.*
 import io.qameta.allure.SeverityLevel.CRITICAL
-import org.testng.annotations.*
+import org.testng.annotations.AfterMethod
+import org.testng.annotations.BeforeMethod
+import org.testng.annotations.Test
 import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
@@ -16,30 +19,15 @@ import strikt.assertions.isEqualTo
 @Features(value = [Feature("Build execution")])
 class BuildsUiTest : BaseUiTest() {
 
-    companion object {
-        private lateinit var projectApi: ProjectApi
-        private lateinit var buildApi: BuildApi
-        private lateinit var vcsRootApi: VcsRootApi
-        private lateinit var buildTypeApi: BuildTypeApi
-    }
-
-    @BeforeClass
-    fun initServicesAndTestUsers() {
-        projectApi = apiServiceCreator.createService(ProjectApi::class.java, admin)
-        buildApi = apiServiceCreator.createService(BuildApi::class.java, admin)
-        vcsRootApi = apiServiceCreator.createService(VcsRootApi::class.java, admin)
-        buildTypeApi = apiServiceCreator.createService(BuildTypeApi::class.java, admin)
-    }
-
     @BeforeMethod
     fun login() {
-        loginFlow.loggedAs(admin)
-        testDataStateHelper.authorizedAllAgents(admin)
+        loginFlow.loggedAs(testData.userData.superAdmin())
+        testDataStateHelper.authorizedAllAgents()
     }
 
     @AfterMethod
     fun unauthorizeAllAgents() {
-        testDataStateHelper.unauthorizedAllAgents(admin)
+        testDataStateHelper.unauthorizedAllAgents()
 
     }
 
@@ -55,30 +43,30 @@ class BuildsUiTest : BaseUiTest() {
         val newMvnStep = testData.buildTestMavenStep()
 
         // Create a new project via API
-        ProjectsApiAssistant.createProject(newProject, projectApi)
+        projectAssistant.createProject(newProject)
         // Create a new vcs root via API
-        VcsRootApiAssistant.addNewVcsRoot(newVcsRoot, vcsRootApi)
+        vcsRootAssistant.addNewVcsRoot(newVcsRoot)
         // Create a new build type via API
-        BuildTypeApiAssistant.createBuildType(newBuildType, buildTypeApi)
+        buildTypeAssistant.createBuildType(newBuildType)
         // Add a VCS root entry to the build type
-        BuildTypeApiAssistant.addVcsRootEntryToBuild(newBuildType.id, newVscRootEntry, buildTypeApi)
+        buildTypeAssistant.addVcsRootEntryToBuild(newBuildType.id, newVscRootEntry)
         // Create a new step for the build via API
-        BuildTypeApiAssistant.addStepToBuildType(newBuildType.id, newMvnStep, buildTypeApi)
+        buildTypeAssistant.addStepToBuildType(newBuildType.id, newMvnStep)
 
         // Run build via UI
         buildFlow.runBuild(newProject.name, newBuildType.name)
 
         // Wait until the build is finished
-        BuildApiAssistant.awaitUntilBuildFinished(newBuildType.id, buildApi)
+        buildAssistant.awaitUntilBuildFinished(newBuildType.id)
 
         // Check that the build is succeeded
-        BuildApiAssistant.getLatestBuild(newBuildType.id, buildApi).also {
+        buildAssistant.getLatestBuild(newBuildType.id).also {
             expectThat(it).isA<BuildDto>()
                 .get { status }.isEqualTo("SUCCESS")
         }
 
         // Check the build content is correct
-        BuildApiAssistant.getBuildStatistics(newBuildType.id, buildApi).also { props: PropertiesDto? ->
+        buildAssistant.getBuildStatistics(newBuildType.id).also { props: PropertiesDto? ->
             expectThat(props).isA<PropertiesDto>()
                 .get { property.find { it.name == "PassedTestCount" }?.value == "4" }
         }

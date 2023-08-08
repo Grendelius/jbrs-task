@@ -1,10 +1,12 @@
 package com.jbrst.jbrstask.api
 
-import com.jbrst.jbrstask.api.models.*
-import io.qameta.allure.*
+import com.jbrst.jbrstask.api.models.AgentDto
+import io.qameta.allure.Epic
+import io.qameta.allure.Feature
+import io.qameta.allure.Severity
 import io.qameta.allure.SeverityLevel.CRITICAL
+import io.qameta.allure.Story
 import org.testng.annotations.AfterMethod
-import org.testng.annotations.BeforeClass
 import org.testng.annotations.Test
 import strikt.api.expectThat
 import strikt.assertions.*
@@ -14,30 +16,20 @@ import strikt.assertions.*
 @Feature("Agent Management")
 class AgentApiTest : BaseApiTest() {
 
-    companion object {
-        private lateinit var agentApi: AgentApi
-    }
-
-    @BeforeClass
-    fun initServicesAndTestData() {
-        agentApi = apiServiceCreator.createService(AgentApi::class.java, admin)
-    }
-
     @AfterMethod
     fun rollbackAgentsState() {
-        testDataStateHelper.unauthorizedAllAgents(admin)
-        testDataStateHelper.enableAllAgents(admin)
+        testDataStateHelper.unauthorizedAllAgents()
+        testDataStateHelper.enableAllAgents()
     }
 
     @Test
     @Severity(CRITICAL)
     fun userIsAbleToAuthorizeConnectedAgentToServerTest() {
         // Get any unauthorized agent
-        val unauthorizedAgentId =
-            AgentApiAssistant.getEnabledUnauthorizedAgents(agentApi)?.agent?.first()?.id.toString()
+        val unauthorizedAgentId = agentAssistant.getEnabledUnauthorizedAgents()?.agent?.first()?.id.toString()
 
         // Authorize a first unauthorized agent
-        val status = AgentApiAssistant.authorizeAgent(unauthorizedAgentId, agentApi)
+        val status = agentAssistant.authorizeAgent(unauthorizedAgentId)
 
         // Check that the agent has been authorized
         expectThat(status) {
@@ -45,7 +37,7 @@ class AgentApiTest : BaseApiTest() {
                 .isTrue()
         }
 
-        val authorizedAgents = AgentApiAssistant.getEnabledAuthorizedAgents(agentApi)
+        val authorizedAgents = agentAssistant.getEnabledAuthorizedAgents()
 
         expectThat(authorizedAgents?.agent).isA<List<AgentDto>>()
             .any { with(AgentDto::id) { isEqualTo(unauthorizedAgentId.toInt()) } }
@@ -56,10 +48,10 @@ class AgentApiTest : BaseApiTest() {
     fun userIsAbleToDisableAndEnableUnauthorizedAgentTest() {
         // Get any unauthorized agent
         val unauthorizedAgentId =
-            AgentApiAssistant.getEnabledUnauthorizedAgents(agentApi)?.agent?.first()?.id.toString()
+            agentAssistant.getEnabledUnauthorizedAgents()?.agent?.first()?.id.toString()
 
         // Disable the agent
-        var status = AgentApiAssistant.disableAgent(unauthorizedAgentId, agentApi)
+        var status = agentAssistant.disableAgent(unauthorizedAgentId)
 
         // Check that the agent has been disabled
         expectThat(status) {
@@ -67,13 +59,13 @@ class AgentApiTest : BaseApiTest() {
                 .isFalse()
         }
 
-        val disabledAgents = AgentApiAssistant.getDisabledUnauthorizedAgents(agentApi)
+        val disabledAgents = agentAssistant.getDisabledUnauthorizedAgents()
 
         expectThat(disabledAgents?.agent).isA<List<AgentDto>>()
             .any { with(AgentDto::id) { isEqualTo(unauthorizedAgentId.toInt()) } }
 
         // Rollback. Enable the agent
-        status = AgentApiAssistant.enableAgent(unauthorizedAgentId, agentApi)
+        status = agentAssistant.enableAgent(unauthorizedAgentId)
 
         // Check that the agent has been enabled
         expectThat(status) {
@@ -81,7 +73,7 @@ class AgentApiTest : BaseApiTest() {
                 .isTrue()
         }
 
-        val enabledAgents = AgentApiAssistant.getEnabledUnauthorizedAgents(agentApi)
+        val enabledAgents = agentAssistant.getEnabledUnauthorizedAgents()
 
         expectThat(enabledAgents?.agent).isA<List<AgentDto>>()
             .any { with(AgentDto::id) { isEqualTo(unauthorizedAgentId.toInt()) } }

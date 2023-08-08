@@ -1,11 +1,10 @@
 package com.jbrst.jbrstask.api
 
+import com.jbrst.jbrstask.api.client.ProjectApi
 import com.jbrst.jbrstask.api.models.NewProjectDescriptionDto
 import com.jbrst.jbrstask.api.models.toUser
-import com.jbrst.jbrstask.core.isOk
 import io.qameta.allure.*
 import io.qameta.allure.SeverityLevel.CRITICAL
-import org.testng.annotations.BeforeClass
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import strikt.api.expectThat
@@ -17,20 +16,9 @@ import strikt.assertions.isGreaterThan
 @Features(value = [Feature("User Management")])
 class UserApiTest : BaseApiTest() {
 
-    companion object {
-        private lateinit var userApi: UsersApi
-        private lateinit var projectsApi: ProjectApi
-    }
-
-    @BeforeClass
-    fun initServicesAndTestData() {
-        userApi = apiServiceCreator.createService(UsersApi::class.java, superAdmin)
-        projectsApi = apiServiceCreator.createService(ProjectApi::class.java, superAdmin)
-    }
-
     @BeforeMethod
     fun createProject() {
-        projectsApi.addProject(NewProjectDescriptionDto("UserCheck", "userCheckName"))
+        projectAssistant.createProject(NewProjectDescriptionDto("UserCheck", "userCheckName"))
     }
 
     @Test
@@ -39,10 +27,7 @@ class UserApiTest : BaseApiTest() {
         // Generate a new user with Admin role
         val newUser = testData.newAdminUser()
         // Create a new user via API
-        val createResponse = userApi.addUser(newUser).execute()
-
-        // Check that the response is OK
-        expectThat(createResponse).isOk()
+        userAssistant.addNewUserAccount(newUser)
 
         // Check that the new user is able to login. List Projects as the new user
         val api: ProjectApi = apiServiceCreator.createService(ProjectApi::class.java, newUser.toUser())
